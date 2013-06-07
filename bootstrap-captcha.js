@@ -1,3 +1,4 @@
+/*global VFIJQ:true, _.:true, console:true, alert:true, document:true */
 (function ($) {
     "use strict";
     $.fn.bootstrapCaptcha = function (userOptions) {
@@ -6,21 +7,22 @@
         this.iconSize = '3x';
         this.resetInvalidDrop = false;
         this.clearWhenCorrect = true;
-        this.asText = false;
+        this.asText = true;
         this.displayTargetArrows = true;
         $.extend(this, userOptions);
-        if (userOptions.onDrop && typeof userOptions.onDrop === 'function') {
+        if (this.onDrop && typeof this.onDrop === 'function') {
             this.callback = true;
         } else {
             this.callback = false;
         }
+        this.toThisTarget = '<strong><span id="bsCaptchaError">to this target</span></strong>';
         this.icons = [
                 'envelope',
                 'anchor',
                 'pencil',
                 'bullhorn',
                 'fire-extinguisher',
-                'camera-retro',
+                'camera',
                 'wrench',
                 'cut',
                 'beaker',
@@ -54,8 +56,64 @@
                 'book',
                 'road',
                 'star',
-                'music'
+                'music',
+                'user',
+                'shield',
+                'puzzle-piece',
+                'bolt',
+                'breifcase',
+                'globe',
+                'leaf'
         ];
+        this.iconNames = {
+            envelope: 'envelope',
+            anchor: 'anchor',
+            pencil: 'pencil',
+            bullhorn: 'bullhorn',
+            'fire-extinguisher': 'fire extinguisher',
+            camera: 'camera',
+            wrench: 'wrench',
+            cut: 'scissors',
+            beaker: 'beaker',
+            magic: 'magic wand',
+            heart: 'heart',
+            cogs: 'cogs',
+            trophy: 'trophy',
+            fire: 'fire',
+            bell: 'bell',
+            money: 'money',
+            truck: 'truck',
+            coffee: 'coffee cup',
+            lightbulb: 'lightbulb',
+            'paper-clip': 'paper clip',
+            lock: 'lock',
+            'credit-card': 'credit card',
+            headphones: 'headphones',
+            microphone: 'microphone',
+            rocket: 'rocket',
+            'fighter-jet': 'fighter jet',
+            search: 'magnifying glass',
+            beer: 'beer mug',
+            'eye-open': 'eye',
+            magnet: 'magnet',
+            ambulance: 'ambulance',
+            home: 'house',
+            glass: 'glass',
+            'facetime-video': 'movie camera',
+            'thumbs-up': 'thumbs-up',
+            gift: 'gift',
+            book: 'book',
+            road: 'road',
+            star: 'star',
+            music: 'musical notes',
+            'user': 'person',
+            shield: 'shield',
+            'puzzle-piece': 'puzzle piece',
+            bolt: 'lightning bolt',
+            breifcase: 'breifcase',
+            globe:'globe',
+            leaf: 'leaf'
+        };
         this.used = [];
         this.stored = [];
         this.mouseUsed = false;
@@ -81,7 +139,7 @@
                 this.attr('data-valid', 'true');
                 this.attr('data-bot', 'false');
                 $icon.hide();
-                $('#targetSpan').empty().append('Correct!');
+                $('#targetSpan').empty().append('<strong>Correct!</strong>');
                 $('.icon-bullseye').hide();
                 $('#bsCaptchaTarget').removeClass('alert-danger').addClass('alert-success');
                 $('.valid-icon').fadeIn();
@@ -125,8 +183,11 @@
                     this.addIcon();
                     return;
                 }
-                if (this.asText) {
-                    $('.what').empty().append(this.stored[randomnumber] + ' icon');
+                if (this.asText === true) {
+                    if (typeof this.iconNames[this.stored[randomnumber]] === 'undefined') {
+                        this.addIcon();
+                    }
+                    $('.what').empty().append('<strong>' + this.iconNames[this.stored[randomnumber]] + '</strong> icon');
                 } else {
                     $('.what').empty().append($('<i/>', {
                         'class': 'icon-' + this.iconSize + ' icon-' + this.stored[randomnumber]
@@ -205,10 +266,11 @@
             }).appendTo('.bsCaptchaDiv:last').append('<li id="targetSpanLI">&nbsp</li>');
             this.str = '<span id="targetSpan">';
             if (this.displayTargetArrows) {
-                this.str += '<i class="icon-arrow-down icon-' + this.iconSize + '"></i> <span id="bsCaptchaError">to this target</span> ';
+                this.str += '<i class="icon-arrow-down icon-' + this.iconSize + '"></i>';
+                this.str += this.toThisTarget;
                 this.str += '<i class="icon-arrow-down icon-' + this.iconSize + '"></i>';
             } else {
-                this.str += '<span id="bsCaptchaError">to this target</span>';
+                this.str += '<strong><span id="bsCaptchaError">to this target</span></strong>';
             }
             this.str += '</span>';
             $('#targetSpanLI').append(this.str);
