@@ -1,21 +1,21 @@
 (function ($) {
     "use strict";
     $.fn.bootstrapCaptcha = function (userOptions) {
+        var that;
         this.attr('data-valid', 'false');
-        this.attr('data-bot', 'false');
+        this.attr('data-mouseUsed', 'false');
         this.iconSize = '3x';
         this.resetInvalidDrop = false;
         this.clearWhenCorrect = true;
-        this.asText = true;
+        this.textPrompt = true;
         this.displayTargetArrows = true;
-        $.extend(this, userOptions);
-        if (this.onDrop && typeof this.onDrop === 'function') {
-            this.callback = true;
+        that = $.extend(true, this, userOptions);
+        if (that.onDrop && typeof that.onDrop === 'function') {
+            that.callback = true;
         } else {
-            this.callback = false;
+            that.callback = false;
         }
-        this.toThisTarget = '<strong><span id="bsCaptchaError">to this target</span></strong>';
-        this.icons = [
+        that.icons = [
                 'envelope',
                 'anchor',
                 'pencil',
@@ -67,11 +67,13 @@
                 'calendar',
                 'frown',
                 'question',
-                'printer',
+                'print',
+                'check',
                 'smile',
-                'key'
+                'key',
+                'keyboard'
         ];
-        this.iconNames = {
+        that.iconNames = {
             envelope: 'envelope',
             anchor: 'anchor',
             pencil: 'pencil',
@@ -110,6 +112,7 @@
             'thumbs-up': 'thumbs-up',
             gift: 'gift',
             book: 'book',
+            keyboard: 'keyboard',
             road: 'road',
             star: 'star',
             music: 'musical notes',
@@ -123,142 +126,142 @@
             leaf: 'leaf',
             'circle-blank': 'circle',
             calendar: 'calendar',
+            check: 'check mark',
             frown: 'frown',
             key: 'key',
             print: 'printer'
         };
-        this.used = [];
-        this.stored = [];
-        this.mouseUsed = false;
-        this.seri = '';
-        this.str = '';
-        this.validate = function ($icon) {
+        that.used = [];
+        that.storedIcons = [];
+        that.mouseUsed = false;
+        that.bsValid = '';
+        that.str = '';
+        that.validate = function ($icon) {
             var x = {
                 valid: false,
-                bot: false
+                mouseUsed: false
             },
-                klass = 'icon-' + this.seri;
-            if (!this.mouseUsed) {
-                this.attr('data-valid', 'false');
-                this.attr('data-bot', 'true');
-                x.bot = true;
-                if (this.callback === true) {
-                    this.onDrop(x);
+                klass = 'icon-' + that.bsValid;
+            that.attr('data-valid', 'false');
+            that.attr('data-mouseUsed', 'false');
+            if (!that.mouseUsed) {
+                if (that.callback === true) {
+                    that.onDrop(x);
                 }
                 return;
             }
+            x.mouseUsed = true;
+            that.attr('data-mouseUsed', 'true');
             if ($icon.hasClass(klass)) {
+                that.attr('data-valid', 'true');
                 x.valid = true;
-                this.attr('data-valid', 'true');
-                this.attr('data-bot', 'false');
+                $('#bsBoop').append($('<i/>', {
+                    'class': 'hide valid-icon icon-' + that.iconSize + ' icon-' + that.bsValid,
+                    id: 'bsValidIcon'
+                }));
                 $icon.hide();
-                $('#targetSpan').empty().append('<strong>Correct!</strong>');
-                $('.icon-bullseye').hide();
-                $('#bsCaptchaTarget').removeClass('alert-danger').addClass('alert-success');
-                $('.valid-icon').fadeIn();
-                if (this.callback === true) {
-                    this.onDrop(x);
-                }
-                if (this.clearWhenCorrect === true) {
+                $('#bsTargetSpan').empty().append('<strong>Correct!</strong>');
+                $('.icon-bullseye').fadeOut(function () {
+                    $('#bsCaptchaTarget').removeClass('alert-danger').addClass('alert-success');
+                    $('#bsValidIcon').fadeIn();
+                });
+                if (that.clearWhenCorrect === true) {
                     $('.bsCaptchaRemove').slideUp();
                 }
+                if (that.callback === true) {
+                    that.onDrop(x);
+                }
                 return;
             }
-            if (this.resetInvalidDrop === true) {
-                this.makeLayout();
+            if (that.resetInvalidDrop === true) {
+                that.makeLayout();
                 return;
             }
-            this.attr('data-valid', 'false');
             $('#bsCaptchaError').empty().append('Try again');
-            if (this.callback === true) {
-                this.onDrop(x);
+            if (that.callback === true) {
+                that.onDrop(x);
             }
         };
-        this.getRandomInt = function (min, max) {
+        that.getRandomInt = function (min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
         };
-        this.addIcon = function () {
-            var that = this,
-                randomnumber = this.getRandomInt(0, (this.icons.length - 1));
-            if ($.inArray(randomnumber, this.used) === -1) {
-                this.used.push(randomnumber);
+        that.addIcon = function () {
+            var randomnumber = that.getRandomInt(0, (that.icons.length - 1));
+            if ($.inArray(randomnumber, that.used) === -1) {
+                that.used.push(randomnumber);
                 $('<i/>', {
-                    'class': 'dr icon-' + this.iconSize + ' icon-' + this.icons[randomnumber]
+                    'class': 'dr icon-' + that.iconSize + ' icon-' + that.icons[randomnumber]
                 }).appendTo('#bsCaptchaOut');
                 $('#bsCaptchaOut').append('&nbsp;&nbsp;');
-                this.stored.push(this.icons[randomnumber]);
+                that.storedIcons.push(that.icons[randomnumber]);
             }
-            if (this.used.length < 6) {
-                this.addIcon();
+            if (that.used.length < 6) {
+                that.addIcon();
+                return;
+            }
+            randomnumber = that.getRandomInt(0, (that.storedIcons.length - 1));
+            if (that.textPrompt === true) {
+                $('#bsWhat').empty().append('<strong>' + that.iconNames[that.storedIcons[randomnumber]] + '</strong> icon');
             } else {
-                randomnumber = this.getRandomInt(0, (this.used.length - 1));
-                if (typeof this.stored[randomnumber] === "undefined") {
-                    this.addIcon();
-                    return;
-                }
-                if (this.asText === true) {
-                    if (typeof this.iconNames[this.stored[randomnumber]] === 'undefined') {
-                        this.addIcon();
-                    }
-                    $('.what').empty().append('<strong>' + this.iconNames[this.stored[randomnumber]] + '</strong> icon');
-                } else {
-                    $('.what').empty().append($('<i/>', {
-                        'class': 'icon-' + this.iconSize + ' icon-' + this.stored[randomnumber]
-                    }));
-                }
-                $('#bsCaptchaTarget').append($('<i/>', {
-                    'class': 'hide valid-icon icon-' + this.iconSize + ' icon-' + this.stored[randomnumber]
+                $('#bsWhat').empty().append($('<i/>', {
+                    'class': 'icon-' + that.iconSize + ' icon-' + that.storedIcons[randomnumber]
                 }));
-                this.seri = this.stored[randomnumber];
-                $('.dr').draggable({
-                    revert: true,
-                    cursor: "move",
-                    helper: "clone"
-                }).on("mousedown", function () {
-                    that.mouseUsed = true;
-                });
-                $('#bsCaptchaTarget').droppable({
-                    accept: ".dr",
-                    activeClass: "ui-state-highlight",
-                    drop: function (event, ui) {
-                        that.validate(ui.draggable);
-                    }
-                });
-                $('#bootstrapCaptchaDiv').slideDown();
+                $('#bsWhat').append(' icon ');
             }
+            $('#bsCaptchaTarget').append($('<li/>', {
+                id: 'bsBoop'
+            }));
+
+            that.bsValid = that.storedIcons[randomnumber];
+            $('.dr').draggable({
+                revert: true,
+                cursor: "move",
+                helper: "clone"
+            }).on("mousedown", function () {
+                that.mouseUsed = true;
+            });
+            $('#bsCaptchaTarget').droppable({
+                accept: ".dr",
+                activeClass: "ui-state-highlight",
+                drop: function (event, ui) {
+                    that.validate(ui.draggable);
+                }
+            });
+            $('#bootstrapCaptchaDiv').slideDown();
+
         };
         //  credit: http://sedition.com/perl/javascript-fy.html
-        this.fisherYates = function () {
-            var i = this.icons.length,
+        that.fisherYates = function () {
+            var i = that.icons.length,
                 j, temp;
             if (i === 0) {
                 return false;
             }
             while (--i) {
                 j = Math.floor(Math.random() * (i + 1));
-                temp = this.icons[i];
-                this.icons[i] = this.icons[j];
-                this.icons[j] = temp;
+                temp = that.icons[i];
+                that.icons[i] = that.icons[j];
+                that.icons[j] = temp;
             }
-            this.addIcon();
+            that.addIcon();
         };
-        this.makeLayout = function () {
-            this.used = [];
-            this.stored = [];
-            this.mouseUsed = false;
-            this.seri = '';
-            this.str = '';
-            this.empty();
+        that.makeLayout = function () {
+            that.used = [];
+            that.storedIcons = [];
+            that.mouseUsed = false;
+            that.bsValid = '';
+            that.str = '';
+            that.empty();
             $('<div/>', {
                 'class': 'hide',
                 id: "bootstrapCaptchaDiv"
-            }).appendTo(this);
+            }).appendTo(that);
             $('<div/>', {
                 'class': 'row-fluid bsCaptchaDiv bsCaptchaRemove'
             }).appendTo('#bootstrapCaptchaDiv');
             $('<ul/>', {
                 'class': 'text-center span6'
-            }).appendTo('.bsCaptchaDiv:last').append('<li>Please drag and drop the <span class="what"></span> below</li>');
+            }).appendTo('.bsCaptchaDiv:last').append('<li>Please drag and drop the <span id="bsWhat"></span> below:</li>');
             $('<div/>', {
                 'class': "row-fluid bsCaptchaDiv bsCaptchaRemove"
             }).appendTo('#bootstrapCaptchaDiv');
@@ -276,25 +279,25 @@
             }).appendTo('#bootstrapCaptchaDiv');
             $('<ul/>', {
                 'class': "span6 text-center"
-            }).appendTo('.bsCaptchaDiv:last').append('<li id="targetSpanLI">&nbsp</li>');
-            this.str = '<span id="targetSpan">';
-            if (this.displayTargetArrows) {
-                this.str += '<i class="icon-arrow-down icon-' + this.iconSize + '"></i>';
-                this.str += this.toThisTarget;
-                this.str += '<i class="icon-arrow-down icon-' + this.iconSize + '"></i>';
+            }).appendTo('.bsCaptchaDiv:last').append('<li id="bsTargetSpanLI">&nbsp</li>');
+            that.str = '<span id="bsTargetSpan">';
+            if (that.displayTargetArrows) {
+                that.str += '<i class="icon-arrow-down icon-' + that.iconSize + '"></i>';
+                that.str += '&nbsp;<strong><span id="bsCaptchaError">to this target</span></strong>&nbsp;';
+                that.str += '<i class="icon-arrow-down icon-' + that.iconSize + '"></i>';
             } else {
-                this.str += '<strong><span id="bsCaptchaError">to this target</span></strong>';
+                that.str += '<strong><span id="bsCaptchaError">to that target</span></strong>';
             }
-            this.str += '</span>';
-            $('#targetSpanLI').append(this.str);
+            that.str += '</span>';
+            $('#bsTargetSpanLI').append(that.str);
             $('<div/>', {
                 'class': 'row-fluid bsCaptchaDiv'
             }).appendTo('#bootstrapCaptchaDiv');
             $('<ul/>', {
                 'class': "span2 offset2 text-center well well-small alert alert-danger",
                 id: 'bsCaptchaTarget'
-            }).appendTo('.bsCaptchaDiv:last').append('<li><i class="icon-bullseye icon-' + this.iconSize + '"></i></li>');
-            this.fisherYates();
+            }).appendTo('.bsCaptchaDiv:last').append('<li><i class="icon-bullseye icon-' + that.iconSize + '"></i></li>');
+            that.fisherYates();
         };
         if ($('body').hasClass('bootstrapCaptcha')) {
             return this;
