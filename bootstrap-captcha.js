@@ -60,9 +60,16 @@
                 'shield',
                 'puzzle-piece',
                 'bolt',
-                'breifcase',
+                'briefcase',
                 'globe',
-                'leaf'
+                'leaf',
+                'circle-blank',
+                'calendar',
+                'frown',
+                'question',
+                'printer',
+                'smile',
+                'key'
         ];
         this.iconNames = {
             envelope: 'envelope',
@@ -89,6 +96,7 @@
             'credit-card': 'credit card',
             headphones: 'headphones',
             microphone: 'microphone',
+            smile: 'smily face',
             rocket: 'rocket',
             'fighter-jet': 'fighter jet',
             search: 'magnifying glass',
@@ -109,9 +117,15 @@
             shield: 'shield',
             'puzzle-piece': 'puzzle piece',
             bolt: 'lightning bolt',
-            breifcase: 'breifcase',
-            globe:'globe',
-            leaf: 'leaf'
+            question: 'question mark',
+            briefcase: 'briefcase',
+            globe: 'globe',
+            leaf: 'leaf',
+            'circle-blank': 'circle',
+            calendar: 'calendar',
+            frown: 'frown',
+            key: 'key',
+            print: 'printer'
         };
         this.used = [];
         this.stored = [];
