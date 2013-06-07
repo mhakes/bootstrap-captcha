@@ -137,11 +137,11 @@
         that.bsValid = '';
         that.str = '';
         that.validate = function ($icon) {
-            var x = {
-                valid: false,
-                mouseUsed: false
-            },
-                klass = 'icon-' + that.bsValid;
+            var klass = 'icon-' + that.bsValid,
+                x = {
+                    valid: false,
+                    mouseUsed: false
+                };
             that.attr('data-valid', 'false');
             that.attr('data-mouseUsed', 'false');
             if (!that.mouseUsed) {
