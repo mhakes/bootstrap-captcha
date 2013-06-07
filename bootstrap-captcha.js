@@ -1,4 +1,3 @@
-/*global VFIJQ:true, _.:true, console:true, alert:true, document:true */
 (function ($) {
     "use strict";
     $.fn.bootstrapCaptcha = function (userOptions) {
