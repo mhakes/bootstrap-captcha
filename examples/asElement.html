@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Example Boostrap Captcha</title>
+<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
+<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.min.css" rel="stylesheet">
+<style>
+    ul { list-style-type: none; }
+</style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div class="span6 offset3 text-center">
+                <h4 class="text-center">Example Boostrap Captcha as document element</h4>
+                <button class="btn btn-success" id="showCaptcha">Show Bootstrap Captcha</button>
+                <p id="showResults"></p>
+            </div>
+        </div>
+        <div id="myBootstrapCaptchaDiv" class="hide"></div>
+    </div>
+<script src="http://code.jquery.com/jquery-latest.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src="../javascripts/bootstrap-captcha.js"></script>
+<script>
+(function($){
+    "use strict";
+    $(document).ready(function(){
+        $('#myBootstrapCaptchaDiv').bootstrapCaptcha({
+            iconSize: '3x',
+            onDrop: function(results){
+                $('#showResults').text('Drop results - Valid = ' + results.valid + ' Human = ' + results.mouseUsed);
+                if(Boolean(results.valid) === true && Boolean(results.mouseUsed) === true){
+                    $('#bsHeader').text('Yep, you\'re human');
+                    $('#bsFooter').fadeIn();
+                }
+            }
+        });
+        $('#showCaptcha').on("click",function(event){
+            event.preventDefault();
+            if($(this).hasClass('beenClicked')){
+                window.location = 'asElement.html';
+                return;
+            }
+            $('#myBootstrapCaptchaDiv').slideDown();
+            $(this).removeClass('btn-success').addClass('btn-primary').text('Reload this page').addClass('beenClicked');
+        });
+
+    });
+}(jQuery));
+</script>
+</body>
+</html>
