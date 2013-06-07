@@ -190,7 +190,7 @@
             if ($.inArray(randomnumber, that.used) === -1) {
                 that.used.push(randomnumber);
                 $('<i/>', {
-                    'class': 'dr icon-' + that.iconSize + ' icon-' + that.icons[randomnumber]
+                    'class': 'bsDraggable icon-' + that.iconSize + ' icon-' + that.icons[randomnumber]
                 }).appendTo('#bsCaptchaOut');
                 $('#bsCaptchaOut').append('&nbsp;&nbsp;');
                 that.storedIcons.push(that.icons[randomnumber]);
@@ -213,7 +213,7 @@
             }));
 
             that.bsValid = that.storedIcons[randomnumber];
-            $('.dr').draggable({
+            $('.bsDraggable').draggable({
                 revert: true,
                 cursor: "move",
                 helper: "clone"
@@ -221,7 +221,7 @@
                 that.mouseUsed = true;
             });
             $('#bsCaptchaTarget').droppable({
-                accept: ".dr",
+                accept: ".bsDraggable",
                 activeClass: "ui-state-highlight",
                 drop: function (event, ui) {
                     that.validate(ui.draggable);
