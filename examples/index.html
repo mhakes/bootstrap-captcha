@@ -4,66 +4,161 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Example Boostrap Captcha</title>
-<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
 <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
-<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.min.css" rel="stylesheet">
-<style>
-    ul { list-style-type: none; }
-</style>
+<link rel="stylesheet" href="css/examplesCSS.css" type="text/css">
 </head>
 <body>
     <div class="container-fluid">
-        <div class="row-fluid">
-            <div class="span6 offset3 text-center">
-                <h4 class="text-center">Example Boostrap Captcha</h4>
-                <button class="btn btn-success" id="showCaptcha">Show Bootstrap Captcha</button>
-                <p id="showResults"></p>
-            </div>
-        </div>
-
-        <div id="captchaModal" class="modal hide fade">
-             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 id="bsHeader" class="text-center">Just to prove you're human...</h4>
-            </div>
-            <div id="captchaOutput" class="modal-body">
-
-            </div>
-            <div class="modal-footer hide" id="bsFooter">
-                <button class="btn btn-small btn-success" data-dismiss="modal" aria-hidden="true">You can close this now</button>
-            </div>
-        </div>
+       <div class="row-fluid topDiv text-center">
+           <table class="table table-bordered">
+               <tr>
+                   <td width="20%"><strong>bootstrap-captcha:</strong><br>Version 0.1 Created 6/6/2013</td>
+                   <td width="80%">A
+                    <a href="http://www.jquery.com" target="_blank">jQuery</a> plug-in that along with
+                    <a href="http://twitter.github.io/bootstrap/" target="_blank">Bootstrap</a> and
+                    <a href="http://fortawesome.github.io/Font-Awesome/" target="_blank">Font-Awesome</a>
+                    will create a stylish, secure, modal validation window.
+                    Your users will appreciate the use of clear visual (randomized) icons instead of hard to read captchas. The mouse movement validation will allow developers
+                     to discover that the user is indeed a human and not a bot!</td>
+               </tr>
+               <tr>
+                   <td><strong>Requirements:</td>
+                   <td>
+                       <ul>
+                           <li>
+                            The required javascript libraries for this plug-in are:
+                            <ul>
+                                <li>jQuery</li>
+                                <li>jQuery UI</li>
+                                <li>Bootstrap</li>
+                                <li>bootstrap-captcha.js (of course)</li>
+                            </ul>
+                           </li>
+                           <li>
+                                The required css libraries for this plug-in are:
+                                <ul>
+                                    <li>jQuery UI css</li>
+                                    <li>Bootstrap-combined css</li>
+                                    <li>Font Awesome css</li>
+                                </ul>
+                           </li>
+                       </ul>
+                       <p><em class="label label-success">Note</em>
+                         All of the javascript and css (with the exception of the bootstrap-captcha.js) are included in the examples via cdn urls. I don't believe in bloating
+                        systems with download after download of standard libraries</p>
+                   </td>
+               </tr>
+               <tr>
+                   <td><strong>Initialization:</strong></td>
+                   <td class="text-left">
+                       <pre>
+                           $('#someDiv').bootstrapCaptcha({
+                                user: 'user',
+                                options: 'options',
+                                here: 'here'
+                           });
+                       </pre>
+                   </td>
+               </tr>
+               <tr>
+                   <td><strong>Examples:</strong></td>
+                   <td>
+                       <ul>
+                           <li class="btn-group">
+                            <a href="asModal.html" target="_blank" class="btn btn-info" role="button">As a Modal `Form`</a></li>
+                            <a href="asElement.html" target="_blank" class="btn btn-inverse" role="button">As a document element</a></li>
+                       </ul>
+                   </td>
+               </tr>
+           </table>
+           <table class="table">
+               <tr>
+                   <th>bootstrapCaptcha Options</th>
+               </tr>
+           </table>
+           <table class="table table-bordered">
+            <tr>
+                <th width="20%">Value</th>
+                <th width="20%">Example</th>
+                <th width="20%">Default</th>
+                <th width="40%">Explanation</th>
+            </tr>
+            <tr>
+                <td>onDrop</td>
+                <td class="text-center">
+                   onDrop: function(results)
+                </td>
+                <td>
+                    Optional
+                </td>
+                <td>
+                    Function returns Object  with values Object.valid (true/false) and Object.mouseUsed (true/false)
+                    Callback function triggered when the user has dropped an icon on to the target.
+                </td>
+            </tr>
+               <tr>
+                   <td>iconSize</td>
+                   <td>{ iconSize: '4x'} (String)</td>
+                   <td>Default: '2x'</td>
+                   <td>Sets the size of the icons for the bootstrap captcha, any variation of the Font-awesome values are permissiable, such as '3x','4x' ect.</td>
+               </tr>
+               <tr>
+                   <td>
+                       resetInvalidDrop
+                   </td>
+                   <td>
+                       { resetInvalidDrop: false } (Boolean)
+                   </td>
+                   <td>
+                       Default: <code>true</code>
+                   </td>
+                   <td>
+                       When a user drops an incorrect icon on the target, by default, all the icons are randomized and shuffled again to help prevent `guessing`.
+                   </td>
+               </tr>
+               <tr>
+                   <td>resetTitle</td>
+                   <td>{ resetTitle: 'I know you can do it!' } (String)</td>
+                   <td>Default: 'Oops..try again.'</td>
+                   <td>
+                       If you choose to set resetInvalidDrop to <code>false</code> you can customize the message the user receives with they drop the incorrect icon using resetTitle
+                   </td>
+               </tr>
+               <tr>
+                   <td>
+                       textPrompt <a href="textPromptOff.html" target="_blank">example here</a>
+                   </td>
+                   <td>
+                       { textPrompt: false} (Boolean)
+                   </td>
+                   <td>
+                       Default: <code>true</code>
+                   </td>
+                   <td>
+                       When set to false, a copy of the correct icon, (not the default wording) prompts the user for the correct icon.
+                   </td>
+               </tr>
+               <tr>
+                   <td>
+                       clearWhenCorrect
+                   </td>
+                   <td>
+                       { clearWhenCorrect: false} (Boolean)
+                   </td>
+                   <td>
+                       Default: <code>true</code>
+                   </td>
+                   <td>By default if the user drags the correct icon, the remaining icons and prompts disappear. You can change that by setting this to false.</td>
+               </tr>
+               <tr>
+                   <td>displayTargetArrows</td>
+                   <td> { displayTargetArrows: false } (Boolean)</td>
+                   <td>Default: <code>true</code> </td>
+                   <td>This can turn the arrows highlighting the target on or off</td>
+               </tr>
+           </table>
+       </div>
     </div>
-<script src="http://code.jquery.com/jquery-latest.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
-<script src="../javascripts/bootstrap-captcha.js"></script>
-<script>
-(function($){
-    "use strict";
-    $(document).ready(function(){
-        $('#captchaOutput').bootstrapCaptcha({
-            iconSize: '3x',
-            onDrop: function(results){
-                $('#showResults').text('Drop results - Valid = ' + results.valid + ' Human = ' + results.mouseUsed);
-                if(Boolean(results.valid) === true && Boolean(results.mouseUsed) === true){
-                    $('#bsHeader').text('Yep, you\'re human');
-                    $('#bsFooter').fadeIn();
-                }
-            }
-        });
-        $('#showCaptcha').on("click",function(event){
-            event.preventDefault();
-            if($(this).hasClass('beenClicked')){
-                window.location = 'index.html';
-                return;
-            }
-            $('#captchaModal').modal('show');
-            $(this).removeClass('btn-success').addClass('btn-primary').text('Reload this page').addClass('beenClicked');
-        });
-
-    });
-}(jQuery));
-</script>
 </body>
 </html>
