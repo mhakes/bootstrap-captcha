@@ -105,7 +105,7 @@
             road: 'road',
             star: 'star',
             music: 'musical notes',
-            'user': 'person',
+            user: 'person',
             shield: 'shield',
             'puzzle-piece': 'puzzle piece',
             bolt: 'lightning bolt',
